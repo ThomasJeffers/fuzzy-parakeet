@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/android">
+    <item
+        android:width="66dp"
+        android:height="66dp"
+        android:drawable="@drawable/mcptt_launcher_icon_1785935997538"
+        android:gravity="center" />
+</layer-list>
