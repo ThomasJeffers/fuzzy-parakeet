@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Experiment 4 completion: Digest REGISTER then MCPTT INVITE/ACK/BYE.
+
+  Same local IP/port for REGISTER Contact and INVITE Via/Contact — required
+  by this lab's P-CSCF (match_contact_host_port = 1).
+
+  Run inside ue1 (see LAB-EXPERIMENTS.md). Do not put the IMS digest secret
+  in this file; pass it with -ap.
+-->
+<scenario name="IMS REGISTER then MCPTT INVITE">
+  <send retrans="500">
+    <![CDATA[
+REGISTER sip:ims.mnc070.mcc901.3gppnetwork.org SIP/2.0
+Via: SIP/2.0/UDP [local_ip]:[local_port];branch=[branch];rport
+From: <sip:[service]@ims.mnc070.mcc901.3gppnetwork.org>;tag=[pid]SIPpTag00[call_number]
+To: <sip:[service]@ims.mnc070.mcc901.3gppnetwork.org>
+Call-ID: [call_id]
+CSeq: 1 REGISTER
+Contact: <sip:[service]@[local_ip]:[local_port]>
+Expires: 600
+Max-Forwards: 70
+Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="401" auth="true" timeout="8000"/>
+
+  <send retrans="500">
+    <![CDATA[
+REGISTER sip:ims.mnc070.mcc901.3gppnetwork.org SIP/2.0
+Via: SIP/2.0/UDP [local_ip]:[local_port];branch=[branch];rport
+From: <sip:[service]@ims.mnc070.mcc901.3gppnetwork.org>;tag=[pid]SIPpTag00[call_number]
+To: <sip:[service]@ims.mnc070.mcc901.3gppnetwork.org>
+Call-ID: [call_id]
+CSeq: 2 REGISTER
+Contact: <sip:[service]@[local_ip]:[local_port]>
+Expires: 600
+[authentication username=[service]@ims.mnc070.mcc901.3gppnetwork.org]
+Max-Forwards: 70
+Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="200" timeout="8000"/>
+
+  <pause milliseconds="300"/>
+
+  <send retrans="500">
+    <![CDATA[
+INVITE sip:group1@ims.mnc070.mcc901.3gppnetwork.org SIP/2.0
+Via: SIP/2.0/UDP [local_ip]:[local_port];branch=[branch];rport
+Route: <sip:orig@scscf.ims.mnc070.mcc901.3gppnetwork.org:6060;lr>
+From: <sip:[service]@ims.mnc070.mcc901.3gppnetwork.org>;tag=[pid]SIPpTag01[call_number]
+To: <sip:group1@ims.mnc070.mcc901.3gppnetwork.org>
+Call-ID: [call_id]-invite
+CSeq: 1 INVITE
+Contact: <sip:[service]@[local_ip]:[local_port]>
+User-Agent: MCPTT-SIPp/1.0
+Accept-Contact: *;+g.3gpp.mcptt
+Content-Type: application/sdp
+Max-Forwards: 70
+Content-Length: [len]
+
+v=0
+o=- [call_number] [call_number] IN IP4 [local_ip]
+s=MCPTT
+c=IN IP4 [local_ip]
+t=0 0
+m=audio 6000 RTP/AVP 0
+a=rtpmap:0 PCMU/8000
+a=sendrecv
+    ]]>
+  </send>
+
+  <recv response="100" optional="true" timeout="4000"/>
+  <recv response="180" optional="true" timeout="4000"/>
+  <recv response="200" rtd="true" timeout="8000"/>
+
+  <send>
+    <![CDATA[
+ACK sip:group1@ims.mnc070.mcc901.3gppnetwork.org SIP/2.0
+Via: SIP/2.0/UDP [local_ip]:[local_port];branch=[branch];rport
+Route: <sip:orig@scscf.ims.mnc070.mcc901.3gppnetwork.org:6060;lr>
+From: <sip:[service]@ims.mnc070.mcc901.3gppnetwork.org>;tag=[pid]SIPpTag01[call_number]
+To: <sip:group1@ims.mnc070.mcc901.3gppnetwork.org>[peer_tag_param]
+Call-ID: [call_id]-invite
+CSeq: 1 ACK
+Contact: <sip:[service]@[local_ip]:[local_port]>
+Max-Forwards: 70
+Content-Length: 0
+
+    ]]>
+  </send>
+
+  <pause milliseconds="2000"/>
+
+  <send retrans="500">
+    <![CDATA[
+BYE sip:group1@ims.mnc070.mcc901.3gppnetwork.org SIP/2.0
+Via: SIP/2.0/UDP [local_ip]:[local_port];branch=[branch];rport
+Route: <sip:orig@scscf.ims.mnc070.mcc901.3gppnetwork.org:6060;lr>
+From: <sip:[service]@ims.mnc070.mcc901.3gppnetwork.org>;tag=[pid]SIPpTag01[call_number]
+To: <sip:group1@ims.mnc070.mcc901.3gppnetwork.org>[peer_tag_param]
+Call-ID: [call_id]-invite
+CSeq: 2 BYE
+Max-Forwards: 70
+Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="200" timeout="8000"/>
+
+  <ResponseTimeRepartition value="10, 20, 50, 100, 200, 500, 1000, 2000, 5000"/>
+  <CallLengthRepartition value="10, 50, 100, 500, 1000, 5000, 10000"/>
+</scenario>
