@@ -27,6 +27,7 @@ import hashlib
 import os
 import re
 import socket
+import struct
 import time
 import uuid
 
@@ -85,6 +86,46 @@ def record_routes(msg: str) -> list[str]:
 
 def uac_route_set(rr: list[str]) -> list[str]:
     return list(reversed(rr))
+
+
+def sdp_c_and_m(msg: str) -> tuple[str, int]:
+    """c=/m= from the 200 OK the UE actually received (after any proxy rewrite)."""
+    parts = msg.replace("\r\n", "\n").split("\n\n", 1)
+    body = parts[1] if len(parts) > 1 else msg
+    ip = ""
+    port = 0
+    for line in body.split("\n"):
+        line = line.strip()
+        if line.startswith("c=IN IP4 "):
+            ip = line.split()[2]
+        elif line.startswith("m=audio "):
+            try:
+                port = int(line.split()[1])
+            except ValueError:
+                port = 0
+    return ip, port
+
+
+def send_pcmu(bind_ip: str, local_port: int, dest_ip: str, dest_port: int, seconds: float) -> int:
+    """20 ms PCMU/8000 silence. AS only needs packets, not audible audio."""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind((bind_ip, local_port))
+    ssrc = uuid.uuid4().int & 0xFFFFFFFF
+    seq = 0
+    ts = 0
+    payload = b"\xff" * 160
+    print(f"RTP PCMU {bind_ip}:{local_port} -> {dest_ip}:{dest_port} for {seconds:.0f}s")
+    end = time.time() + seconds
+    while time.time() < end:
+        pkt = struct.pack("!BBHII", 0x80, 0, seq & 0xFFFF, ts & 0xFFFFFFFF, ssrc) + payload
+        sock.sendto(pkt, (dest_ip, dest_port))
+        seq += 1
+        ts = (ts + 160) & 0xFFFFFFFF
+        time.sleep(0.02)
+    sock.close()
+    print(f"RTP sent {seq} packets")
+    return seq
 
 
 def auth_param(www: str, name: str) -> str:
@@ -317,8 +358,13 @@ def run(args: argparse.Namespace) -> int:
         print("dialog To-tag=", tag)
         print("dialog R-URI=", as_uri)
         print("dialog Route (P-CSCF first)=", routes)
+        rtp_ip, rtp_port = sdp_c_and_m(ok)
+        print(f"answer SDP media {rtp_ip}:{rtp_port}")
         if not tag or not routes:
             print("200 OK missing To-tag or Record-Route")
+            return 1
+        if args.rtp and (not rtp_ip or not rtp_port):
+            print("200 OK missing SDP c=/m= — cannot send RTP")
             return 1
 
         ack = sip_request(
@@ -339,7 +385,10 @@ def run(args: argparse.Namespace) -> int:
 
         if args.role == "join":
             print(f"holding dialog {args.hold:.0f}s — start UE1 --role floor NOW")
-            time.sleep(args.hold)
+            if args.rtp:
+                send_pcmu(bind_ip, args.rtp_local_port, rtp_ip, rtp_port, args.hold)
+            else:
+                time.sleep(args.hold)
             return 0
 
         time.sleep(0.5)
@@ -365,7 +414,12 @@ def run(args: argparse.Namespace) -> int:
             print("INFO failed")
             return 1
         print("EXP5 PASS: floor INFO 200 OK")
-        time.sleep(3)
+        if args.rtp:
+            time.sleep(1.0)
+            n = send_pcmu(bind_ip, args.rtp_local_port, rtp_ip, rtp_port, args.rtp_seconds)
+            print(f"EXP6 RTP TX done ({n} packets) — check AS for RTP rx= / RTP fwd")
+        else:
+            time.sleep(3)
         return 0
     finally:
         sock.close()
@@ -380,6 +434,10 @@ def main() -> None:
     p.add_argument("--role", choices=("join", "floor"), default="floor")
     p.add_argument("--hold", type=float, default=180.0)
     p.add_argument("--timeout", type=float, default=15.0)
+    p.add_argument("--rtp", dest="rtp", action="store_true", default=True)
+    p.add_argument("--no-rtp", dest="rtp", action="store_false")
+    p.add_argument("--rtp-seconds", type=float, default=12.0)
+    p.add_argument("--rtp-local-port", type=int, default=6000)
     raise SystemExit(run(p.parse_args()))
 
 
