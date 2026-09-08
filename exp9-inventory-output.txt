@@ -1,0 +1,318 @@
+root@ogs:~# bash exp9-inventory.sh
+===== docker IMS / EPC names =====
+mme         Up 51 minutes   3868/sctp, 3868/tcp, 5868/tcp, 2123/udp, 5868/sctp, 9091/tcp, 0.0.0.0:36412->36412/sctp, [::]:36412->36412/sctp
+sgwu        Up 51 minutes   0.0.0.0:2152->2152/udp, [::]:2152->2152/udp, 8805/udp
+sgwc        Up 51 minutes   2123/udp, 8805/udp
+pcscf       Up 51 minutes   3871/tcp, 3871/sctp, 5060/tcp, 5060/udp
+webui       Up 51 minutes   0.0.0.0:9999->9999/tcp, [::]:9999->9999/tcp
+pcrf        Up 51 minutes   3873/sctp, 3873/tcp, 5868/sctp, 5868/tcp
+upf         Up 51 minutes   2152/udp, 8805/udp, 9091/tcp
+smf         Up 51 minutes   3868/sctp, 3868/tcp, 5868/tcp, 2123/udp, 7777/tcp, 8805/udp, 5868/sctp, 9091/tcp
+mongo       Up 51 minutes   27017/tcp, 27017/udp
+
+===== P-CSCF Rx flags (must show WITH_RX) =====
+/etc/kamailio_pcscf/pcscf.cfg:120:#     - define WITH_RX
+/etc/kamailio_pcscf/pcscf.cfg:140:#!define WITH_RX
+/mnt/pcscf/pcscf.cfg:120:#     - define WITH_RX
+/mnt/pcscf/pcscf.cfg:140:#!define WITH_RX
+/etc/kamailio_pcscf/route/mo.cfg:148:		if (Rx_AAR("MO_aar_reply","orig","",-1) == 0) {
+/etc/kamailio_pcscf/route/mo.cfg:256:		if (Rx_AAR("MO_indialog_aar_reply","orig","",-1) == 0) {
+/mnt/pcscf/route/mo.cfg:148:		if (Rx_AAR("MO_aar_reply","orig","",-1) == 0) {
+/mnt/pcscf/route/mo.cfg:256:		if (Rx_AAR("MO_indialog_aar_reply","orig","",-1) == 0) {
+
+===== PCRF / SMF recent QoS errors =====
+09/07 11:06:16.346: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.346: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:16.346: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:16.346: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.346: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.346: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.567: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.567: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:16.567: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:16.567: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.567: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.567: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.660: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.660: [pcrf] WARNING: Not supported AVP code(504) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.660: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.660: [pcrf] WARNING: Not supported AVP code(458) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.660: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:16.660: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:16.660: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:16.660: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.022: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.022: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:25.022: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:25.022: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.023: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.023: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.265: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.265: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:25.265: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:25.265: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.265: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.265: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.359: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.359: [pcrf] WARNING: Not supported AVP code(504) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.359: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.359: [pcrf] WARNING: Not supported AVP code(458) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.359: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:25.359: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:06:25.359: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:06:25.359: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.283: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.283: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:16:53.283: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:16:53.283: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.283: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.283: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.586: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.586: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:16:53.586: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:16:53.586: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.586: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.586: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.808: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.808: [pcrf] WARNING: Not supported AVP code(504) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.808: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.808: [pcrf] WARNING: Not supported AVP code(458) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.808: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:16:53.808: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:16:53.808: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:16:53.808: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.383: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.383: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:17:08.383: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:17:08.383: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.383: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.383: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.644: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.644: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:17:08.644: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:17:08.644: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.644: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.644: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.758: [pcrf] WARNING: Not supported AVP code(260) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.758: [pcrf] WARNING: Not supported AVP code(504) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.758: [pcrf] WARNING: Not supported AVP code(291) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.758: [pcrf] WARNING: Not supported AVP code(458) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.758: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:17:08.758: [pcrf] WARNING: Not supported AVP code(524) (../src/pcrf/pcrf-rx-path.c:423)
+09/07 11:17:08.758: [pcrf] WARNING: Not supported AVP code(276) (../src/pcrf/pcrf-rx-path.c:444)
+09/07 11:17:08.758: [pcrf] WARNING: Not supported AVP code(27) (../src/pcrf/pcrf-rx-path.c:444)
+--- smf ---
+(no matching smf lines)
+
+===== IMS subscriber PCC (Mongo) =====
+==== IMSI 491234567890123 ====
+{
+  apn: 'internet',
+  default_qci: 9,
+  arp: {
+    priority_level: 8,
+    pre_emption_capability: 1,
+    pre_emption_vulnerability: 1
+  },
+  pcc_rules: [
+    {
+      qci: 1,
+      arp: {
+        priority_level: 2,
+        pre_emption_capability: 2,
+        pre_emption_vulnerability: 2
+      },
+      mbr: {
+        downlink: {
+          value: 128,
+          unit: 1
+        },
+        uplink: {
+          value: 128,
+          unit: 1
+        }
+      },
+      gbr: {
+        downlink: {
+          value: 128,
+          unit: 1
+        },
+        uplink: {
+          value: 128,
+          unit: 1
+        }
+      },
+      flows: []
+    },
+    {
+      qci: 2,
+      arp: {
+        priority_level: 4,
+        pre_emption_capability: 2,
+        pre_emption_vulnerability: 2
+      },
+      mbr: {
+        downlink: {
+          value: 512,
+          unit: 1
+        },
+        uplink: {
+          value: 512,
+          unit: 1
+        }
+      },
+      gbr: {
+        downlink: {
+          value: 512,
+          unit: 1
+        },
+        uplink: {
+          value: 512,
+          unit: 1
+        }
+      },
+      flows: []
+    }
+  ]
+}
+{
+  apn: 'ims',
+  default_qci: 5,
+  arp: {
+    priority_level: 1,
+    pre_emption_capability: 1,
+    pre_emption_vulnerability: 1
+  },
+  pcc_rules: [
+    {
+      qci: 1,
+      arp: {
+        priority_level: 2,
+        pre_emption_capability: 2,
+        pre_emption_vulnerability: 2
+      },
+      mbr: {
+        downlink: {
+          value: 128,
+          unit: 1
+        },
+        uplink: {
+          value: 128,
+          unit: 1
+        }
+      },
+      gbr: {
+        downlink: {
+          value: 128,
+          unit: 1
+        },
+        uplink: {
+          value: 128,
+          unit: 1
+        }
+      },
+      flows: []
+    },
+    {
+      qci: 2,
+      arp: {
+        priority_level: 4,
+        pre_emption_capability: 2,
+        pre_emption_vulnerability: 2
+      },
+      mbr: {
+        downlink: {
+          value: 512,
+          unit: 1
+        },
+        uplink: {
+          value: 512,
+          unit: 1
+        }
+      },
+      gbr: {
+        downlink: {
+          value: 512,
+          unit: 1
+        },
+        uplink: {
+          value: 512,
+          unit: 1
+        }
+      },
+      flows: []
+    }
+  ]
+}
+==== IMSI 491234567890124 ====
+{
+  apn: 'ims',
+  default_qci: 5,
+  arp: {
+    priority_level: 1,
+    pre_emption_capability: 1,
+    pre_emption_vulnerability: 1
+  },
+  pcc_rules: [
+    {
+      qci: 1,
+      arp: {
+        priority_level: 2,
+        pre_emption_capability: 2,
+        pre_emption_vulnerability: 2
+      },
+      mbr: {
+        downlink: {
+          value: 128,
+          unit: 1
+        },
+        uplink: {
+          value: 128,
+          unit: 1
+        }
+      },
+      gbr: {
+        downlink: {
+          value: 128,
+          unit: 1
+        },
+        uplink: {
+          value: 128,
+          unit: 1
+        }
+      },
+      flows: []
+    },
+    {
+      qci: 2,
+      arp: {
+        priority_level: 4,
+        pre_emption_capability: 2,
+        pre_emption_vulnerability: 2
+      },
+      mbr: {
+        downlink: {
+          value: 512,
+          unit: 1
+        },
+        uplink: {
+          value: 512,
+          unit: 1
+        }
+      },
+      gbr: {
+        downlink: {
+          value: 512,
+          unit: 1
+        },
+        uplink: {
+          value: 512,
+          unit: 1
+        }
+      },
+      flows: []
+    }
+  ]
+}
+
+Inventory done. Next: add missing QCI to srsENB drb.conf, then PCC QCI 1 in WebUI.
