@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Experiment 8 — MCPTT iFC for PyHSS.
+
+  This file is a clone of docker_open5gs pyhss/default_ifc.xml PublicIdentity
+  layout (required by Kamailio Cx-User-Data parse on SAR/SAA). The only
+  functional change versus stock is the originating-INVITE iFC, which is
+  uncommented and pointed at the lab MCPTT AS instead of the fake
+  applicationserver.ims... hostname.
+
+  Do NOT edit default_ifc.xml.
+  ifc_path must be the filename only: mcptt_ifc.xml
+  (PyHSS diameter.py Answer_16777216_301 uses Jinja FileSystemLoader("../")).
+-->
+<IMSSubscription>
+    <PrivateID>{{ iFC_vars['imsi'] }}@ims.mnc{{ iFC_vars['mnc'] }}.mcc{{ iFC_vars['mcc'] }}.3gppnetwork.org</PrivateID>
+    <ServiceProfile>
+        <PublicIdentity>
+            <Identity>sip:{{ iFC_vars['msisdn'] }}@ims.mnc{{ iFC_vars['mnc'] }}.mcc{{ iFC_vars['mcc'] }}.3gppnetwork.org</Identity>
+            <Extension>
+                <IdentityType>0</IdentityType>
+                <Extension>
+                    <AliasIdentityGroupID>1</AliasIdentityGroupID>
+                </Extension>
+            </Extension>
+        </PublicIdentity>
+        <PublicIdentity>
+            <Identity>tel:{{ iFC_vars['msisdn'] }}</Identity>
+            <Extension>
+                <IdentityType>0</IdentityType>
+                <Extension>
+                    <AliasIdentityGroupID>1</AliasIdentityGroupID>
+                </Extension>
+            </Extension>
+        </PublicIdentity>
+        <PublicIdentity>
+            <Identity>sip:{{ iFC_vars['imsi'] }}@ims.mnc{{ iFC_vars['mnc'] }}.mcc{{ iFC_vars['mcc'] }}.3gppnetwork.org</Identity>
+            <Extension>
+                <IdentityType>0</IdentityType>
+            </Extension>
+        </PublicIdentity>
+
+        <!-- SIP MESSAGE Traffic (same as stock default_ifc.xml) -->
+        <InitialFilterCriteria>
+            <Priority>20</Priority>
+            <TriggerPoint>
+                <ConditionTypeCNF>1</ConditionTypeCNF>
+                <SPT>
+                    <ConditionNegated>0</ConditionNegated>
+                    <Group>0</Group>
+                    <Method>MESSAGE</Method>
+                    <Extension></Extension>
+                </SPT>
+                <SPT>
+                    <ConditionNegated>1</ConditionNegated>
+                    <Group>1</Group>
+                    <SIPHeader>
+                        <Header>Server</Header>
+                    </SIPHeader>
+                </SPT>
+                <SPT>
+                    <ConditionNegated>0</ConditionNegated>
+                    <Group>2</Group>
+                    <SessionCase>0</SessionCase>
+                    <Extension></Extension>
+                </SPT>
+            </TriggerPoint>
+            <ApplicationServer>
+                <ServerName>sip:smsc.ims.mnc{{ iFC_vars['mnc'] }}.mcc{{ iFC_vars['mcc'] }}.3gppnetwork.org:5060</ServerName>
+                <DefaultHandling>0</DefaultHandling>
+            </ApplicationServer>
+        </InitialFilterCriteria>
+
+        <!-- MCPTT originating INVITE — stock trigger shape, lab AS address -->
+        <InitialFilterCriteria>
+            <Priority>30</Priority>
+            <TriggerPoint>
+                <ConditionTypeCNF>1</ConditionTypeCNF>
+                <SPT>
+                    <ConditionNegated>0</ConditionNegated>
+                    <Group>0</Group>
+                    <Method>INVITE</Method>
+                    <Extension></Extension>
+                </SPT>
+                <SPT>
+                    <Group>0</Group>
+                    <SessionCase>0</SessionCase>
+                </SPT>
+            </TriggerPoint>
+            <ApplicationServer>
+                <ServerName>sip:172.30.104.240:5070;transport=udp</ServerName>
+                <DefaultHandling>0</DefaultHandling>
+            </ApplicationServer>
+        </InitialFilterCriteria>
+    </ServiceProfile>
+</IMSSubscription>
